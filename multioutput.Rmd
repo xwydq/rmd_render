@@ -1,0 +1,67 @@
+---
+title: "Untitled"
+author: "xuwy"
+date: "2020/4/15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE, eval = TRUE, results = "asis"}
+library(plotly)
+p1 = plot_ly(economics, x = ~pop)
+p2 = plot_ly(economics, x = ~date, y = ~pop)
+# plot_ly() doesn't require data frame(s), which allows one to take 
+# advantage of trace type(s) designed specifically for numeric matrices
+p3 = plot_ly(z = ~volcano)
+p4 = plot_ly(z = ~volcano, type = "surface")
+
+if(TRUE){
+  cat("\n### 数据简介\n", fill = TRUE)
+  plot(rnorm(11))
+  p1
+  
+  cat("\n\n### 数据基本信息\n", fill = TRUE)
+  p2
+}
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+:::: {style="display: flex;"}
+
+::: {}
+Here is the **first** Div.
+
+```{r}
+str(iris)
+```
+:::
+
+::: {}
+And this block will be put on the right:
+
+```{r}
+plot(iris[, -5])
+```
+:::
+
+::::

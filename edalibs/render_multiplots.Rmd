@@ -1,0 +1,89 @@
+---
+title: "多图渲染用时测试 demo"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(plotly)
+library(plyr)
+```
+
+### 数据表DT
+
+```{r}
+library(DT)
+datatable(iris)
+```
+
+### summary-text
+```{r cars}
+summary(cars)
+```
+
+### ggplotly
+
+```{r}
+dd<-data.frame(matrix(rnorm(144, mean=2, sd=2),72,2),c(rep("A",24),rep("B",24),rep("C",24)))
+colnames(dd) <- c("x_value", "Predicted_value",  "State_CD")
+
+dd <- data.frame(
+  predicted = rnorm(72, mean = 2, sd = 2),
+  state = rep(c("A", "B", "C"), each = 24)
+)
+
+grid <- with(dd, seq(min(predicted), max(predicted), length = 100))
+normaldens <- ddply(dd, "state", function(df) {
+  data.frame(
+    predicted = grid,
+    density = dnorm(grid, mean(df$predicted), sd(df$predicted))
+  )
+})
+
+p <- ggplot(dd, aes(predicted))  +
+            geom_density() +
+            geom_line(aes(y = density), data = normaldens, colour = "red") +
+            facet_wrap(~ state)
+ggplotly(p)
+```
+
+
+### 交互图
+
+```{r}
+library(plotly)
+p <- plot_ly(iris, x = ~Sepal.Width, y = ~Sepal.Length) 
+add_markers(p, color = ~Petal.Length, size = ~Petal.Length)
+```
+
+
+### multi maps
+```{r}
+library(plotly)
+
+htmltools::tagList(lapply(1:20, function(x) { plot_ly(x = rnorm(1000)) }))
+```
+
+
+### ggplot2 facet to plotly
+```{r}
+library(plotly)
+set.seed(123)
+
+df <- diamonds[sample(1:nrow(diamonds), size = 1000), ]
+
+# Create labels
+labs <- c("Best","Second best","Third best","Average", "Average","Third Worst","Second Worst","Worst")
+levels(df$clarity) <- rev(labs)
+
+p <- ggplot(df, aes(carat, price)) + 
+  geom_point() + 
+  facet_wrap(~ clarity) + 
+  ggtitle("Diamonds dataset facetted by clarity")
+
+fig <- ggplotly(p)
+
+fig
+```
+

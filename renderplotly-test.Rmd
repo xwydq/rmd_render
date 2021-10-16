@@ -1,0 +1,78 @@
+---
+params:
+  plots: plots
+title: "renderplotly-test"
+output: flexdashboard::flex_dashboard
+---
+
+```{r global_options, include=FALSE}
+## Load library
+library(data.table)
+library(rmarkdown)
+library(knitr)
+library(plotly)
+library(DT)
+library(DataExplorer)
+
+## Set knitr options
+opts_chunk$set(
+  fig.width = 14,
+  fig.height = 10,
+  echo = FALSE,
+  results = "asis",
+  warning = FALSE,
+  message = FALSE
+)
+
+## Get user data
+plots <- params$plots
+```
+
+
+Column {data-width=400}
+-----------------------------------------------------------------------
+
+### 度量类字段的分布特征
+```{r univar_metric_info}
+datatable(iris, options = list(dom = 't'), rownames=FALSE)
+```
+
+### plotly
+```{r}
+p = plot_ly(economics, x = ~pop)
+p
+```
+
+
+Column {data-width=600 .tabset .tabset-fade}
+-----------------------------------------------------------------------
+
+### plotly7
+```{r}
+# plots[["p7"]]
+```
+
+
+```{r}
+for (pi in 7:length(plots)) {
+  chart_nm = sprintf("直方图 P%s", pi)
+  cat(sprintf("\n### %s\n", chart_nm), fill = TRUE)
+  cat("\n\n", fill = TRUE)
+  # cat(plots[[pi]], fill = TRUE)
+  # print(htmltools::tagList(list(plots[[pi]])))
+  cat(htmltools::renderTags(as.widget(plots[[pi]]))$html, fill = TRUE)
+  cat("\n\n", fill = TRUE)
+  cat("\n", fill = TRUE)
+}
+```
+
+```{r echo=FALSE, messages=FALSE, warning=FALSE}
+# Attach the Dependencies since they do not get included with renderTags(...)$html
+# deps <- lapply(
+#   Filter(f = function(x){inherits(x,"htmlwidget")}, x = plots),
+#   function(hw){
+#     htmltools::renderTags(hw)$dependencies
+#   }
+# )
+# htmltools::attachDependencies(x = htmltools::tagList(), value = unlist(deps,recursive=FALSE))
+```

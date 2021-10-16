@@ -1,0 +1,45 @@
+---
+params:
+  plots: plots
+title: "renderplotly-test"
+output: html_document
+---
+
+```{r global_options, include=FALSE}
+## Load library
+library(data.table)
+library(rmarkdown)
+library(knitr)
+library(plotly)
+library(DT)
+library(htmltools)
+library(magrittr)
+
+## Set knitr options
+opts_chunk$set(
+  fig.width = 14,
+  fig.height = 10,
+  echo = FALSE,
+  results = "asis",
+  warning = FALSE,
+  message = FALSE
+)
+
+## Get user data
+plots <- params$plots
+```
+
+
+### helll
+
+```{r}
+render_tabplots(plots)
+```
+
+### helll8888
+
+```{r}
+# render_tabplots(plots)
+render_orderplots(plots, tagh3=FALSE)
+# htmltools::tagList(plots)
+```

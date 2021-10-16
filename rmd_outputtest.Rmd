@@ -1,0 +1,72 @@
+---
+title: "测试Rmd文件输出"
+author: "xuwy"
+date: "2020/3/13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Include img
+```{r}
+library(htmltools)
+thumbnail <- function(title, img, href, caption = TRUE) {
+  div(class = "col-sm-4",
+      a(class = "thumbnail", title = title, href = href,
+        img(src = img),
+        div(class = ifelse(caption, "caption", ""),
+          ifelse(caption, title, "")
+        )
+      )
+  )
+}
+
+thumbnail("Apple", "https://www.macworld.co.uk/cmsdata/features/3658198/apple_event_image_2019_thumb800.png", "https://www.macworld.co.uk/cmsdata/features/3658198/apple_event_image_2019_thumb800.png")
+```
+
+```{r}
+img(src = "https://www.macworld.co.uk/cmsdata/features/3658198/apple_event_image_2019_thumb800.png")
+div(class = "col-sm-4",
+    img(src = "https://www.macworld.co.uk/cmsdata/features/3658198/apple_event_image_2019_thumb800.png")
+)
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+## 表格
+
+```{r DT, echo=FALSE}
+library(DT)
+datatable(iris)
+```
+
+
+## web plot
+
+```{r plotly, echo=FALSE}
+library(plotly)
+p <- plot_ly(iris, x = ~Sepal.Width, y = ~Sepal.Length) 
+add_markers(p, color = ~Petal.Length, size = ~Petal.Length)
+```

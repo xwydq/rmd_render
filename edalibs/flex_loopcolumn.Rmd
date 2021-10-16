@@ -1,0 +1,60 @@
+---
+params:
+  plots: plots
+title: "Loop to Auto Build Tabs Containing htmlwidgets"
+output: flexdashboard::flex_dashboard
+---
+
+```{r global_options, echo =FALSE, eval = TRUE}
+library(data.table)
+library(rmarkdown)
+library(knitr)
+library(plotly)
+library(DT)
+library(htmltools)
+library(magrittr)
+## Set knitr options
+opts_chunk$set(
+  fig.width = 14,
+  fig.height = 10,
+  echo = FALSE,
+  results = "asis",
+  warning = FALSE,
+  message = FALSE
+)
+## Get user data
+plots <- params$plots
+```
+
+Page
+====================
+
+Column {.tabset .tabset-fade}
+-----------------------------
+
+
+
+### p3
+```{r}
+tags$div(as_widget(plots[[3]]))
+```
+
+
+```{r, echo = FALSE, eval = TRUE}
+out <- lapply(seq_along(plots), function(i) {
+  a1 <- knitr::knit_expand(text = sprintf("### %s\n", names(plots)[i])) # tab header, auto extracts names of `plots`
+  a2 <- knitr::knit_expand(text = "\n```{r}") # start r chunk
+  a3 <- knitr::knit_expand(text = sprintf("\ntags$div(as_widget(plots[[%d]]))", i))
+  a4 <- knitr::knit_expand(text = "\n```\n") # end r chunk
+  paste(a1, a2, a3, a4, collapse = '\n') # collapse together all lines with newline separator
+})
+```
+
+`r knitr::knit(text = paste(out, collapse = '\n'))`
+
+
+### helll
+
+```{r}
+render_tabplots(plots)
+```

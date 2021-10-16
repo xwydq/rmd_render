@@ -1,0 +1,46 @@
+---
+title: "Focal Chart (Left)"
+output: flexdashboard::flex_dashboard
+params:
+  plots: plt_list
+---
+
+```{r global_options, include=FALSE}
+print("========output")
+print(str(output))
+print(output)
+
+## Load library
+library(data.table)
+library(rmarkdown)
+library(knitr)
+library(ggplot2)
+## Set knitr options
+opts_chunk$set(
+  fig.width = 14,
+  fig.height = 10,
+  echo = FALSE,
+  results = "asis",
+  warning = TRUE
+)
+plots <- params$plots
+```
+
+
+Column {.tabset}
+-------------------------------------
+
+```{r}
+for (pi in 1:length(plots)) {
+  chart_nm = sprintf("Chart NO %s", pi)
+  cat(sprintf("\n### %s\n", chart_nm), fill = TRUE)
+  print(plots[[pi]])
+  cat("\n")
+}
+```
+
+### Chart 3
+    
+```{r}
+```
+   

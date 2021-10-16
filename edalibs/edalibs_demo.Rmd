@@ -1,0 +1,98 @@
+---
+title: "flexdashboard demo"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+    social: menu
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(plotly)
+library(plyr)
+```
+
+第一页gauge
+=======================================================================
+
+
+
+Row
+-----------------------------------------------------------------------
+
+### 数据表
+
+```{r}
+library(DT)
+datatable(iris)
+```
+
+### summary
+```{r cars}
+summary(cars)
+```
+
+Row
+-----------------------------------------------------------------------
+
+### 压力图
+
+```{r}
+plot(pressure)
+```
+
+### 交互图
+
+```{r}
+library(plotly)
+p <- plot_ly(iris, x = ~Sepal.Width, y = ~Sepal.Length) 
+add_markers(p, color = ~Petal.Length, size = ~Petal.Length)
+```
+
+
+Row
+-----------------------------------------------------------------------
+
+### geom_density and facet_wrap Together
+
+```{r}
+dd<-data.frame(matrix(rnorm(144, mean=2, sd=2),72,2),c(rep("A",24),rep("B",24),rep("C",24)))
+colnames(dd) <- c("x_value", "Predicted_value",  "State_CD")
+
+dd <- data.frame(
+  predicted = rnorm(72, mean = 2, sd = 2),
+  state = rep(c("A", "B", "C"), each = 24)
+)
+
+grid <- with(dd, seq(min(predicted), max(predicted), length = 100))
+normaldens <- ddply(dd, "state", function(df) {
+  data.frame(
+    predicted = grid,
+    density = dnorm(grid, mean(df$predicted), sd(df$predicted))
+  )
+})
+
+p <- ggplot(dd, aes(predicted))  +
+            geom_density() +
+            geom_line(aes(y = density), data = normaldens, colour = "red") +
+            facet_wrap(~ state)
+ggplotly(p)
+```
+
+### Density and Scatterplot Overlay Using geom_density
+
+```{r}
+df <- data.frame(x <- rchisq(1000, 10, 10),
+                 y <- rnorm(1000))
+
+p <- ggplot(df, aes(x, y)) + 
+     geom_point(alpha = 0.5) + 
+     geom_density_2d() + 
+     theme(panel.background = element_rect(fill = '#ffffff'))
+
+ggplotly(p)
+```
+
