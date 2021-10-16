@@ -1,0 +1,70 @@
+---
+title: "Centos下Rmd渲染pdf中文支持（原生）"
+CJKmainfont: Microsoft YaHei
+header-includes:
+   - \usepackage{xeCJK}
+output:
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 安装tinytex
+
+```{r eval=FALSE}
+# https://zhuanlan.zhihu.com/p/96993644
+# devtools::install_github(c('rstudio/rmarkdown', 'yihui/tinytex'))
+# tinytex::install_tinytex()
+```
+
+## 中文支持
+
+1. 需要指定latex `latex_engine: xelatex`
+2. 在yml配置中添加中文的支持 
+   ```
+    CJKmainfont: Microsoft YaHei
+    header-includes:
+       - \usepackage{xeCJK}
+   ```
+
+输出一段中文：这里提供的rticles模板可能由于种种原因不能满足客官的要求
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## 画图
+
+渲染PDF画图部分必须指定`dev`为`png/cairo_pdf`，否则图片中中文不能正常显示
+
+### png画图1
+
+```{r, dev="png", echo=FALSE}
+plot(rnorm(10), main = '中文')
+```
+
+### png画图2
+
+提高清晰度`dpi`
+```{r, dev="png", dpi=1000, echo=FALSE}
+plot(rnorm(10), main = '中文')
+```
+
+
+### cairo_pdf画图
+
+```{r, dev="cairo_pdf"}
+library(ggplot2)
+p <- ggplot(mpg, aes(class, hwy))
+p + geom_boxplot() + ggtitle("微软雅黑")
+```
+
